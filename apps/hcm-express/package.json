@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "echo \"Building hcm-express... (no-op)\""
   },
   "dependencies": {
     "body-parser": "^1.20.2",

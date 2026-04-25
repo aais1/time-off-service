@@ -11,7 +11,7 @@ export class HcmHttpAdapter implements HcmAdapter {
 
   async submitTimeOffRequest(params: HcmTimeOffRequestParams): Promise<HcmTimeOffRequestResponse> {
     try {
-      const base = process.env.HCM_URL || 'http://localhost:4000';
+  const base = process.env.HCM_URL || "http://localhost:4000" ;
       const url = `${base.replace(/\/$/, '')}/realtime/book`;
       const response = await lastValueFrom(
         this.httpService.post(url, params, { timeout: 5000 })
@@ -37,6 +37,31 @@ export class HcmHttpAdapter implements HcmAdapter {
       // Technical error (Timeout, 5xx, Network down)
       this.logger.error(`HCM Adapter failed: ${error.message}`);
       throw error;
+    }
+  }
+
+  async fetchAllBalances(): Promise<Array<{ employeeId: string; locationId: string; balance: number }>> {
+    try {
+  const base = process.env.HCM_URL || "http://localhost:4000";
+      const url = `${base.replace(/\/$/, '')}/balances`;
+      const response = await lastValueFrom(this.httpService.get(url, { timeout: 5000 }));
+      // Expect HCM mock to return an array of { employeeId, locationId, balance }
+      return response.data || [];
+    } catch (err: any) {
+      this.logger.warn(`fetchAllBalances failed: ${err.message}`);
+      return [];
+    }
+  }
+
+  async fetchBalance(employeeId: string, locationId: string): Promise<{ employeeId: string; locationId: string; balance: number } | null> {
+    try {
+  const base = process.env.HCM_URL || "http://localhost:4000";
+      const url = `${base.replace(/\/$/, '')}/balances/${encodeURIComponent(employeeId)}/${encodeURIComponent(locationId)}`;
+      const response = await lastValueFrom(this.httpService.get(url, { timeout: 5000 }));
+      return response.data || null;
+    } catch (err: any) {
+      this.logger.warn(`fetchBalance failed for ${employeeId}/${locationId}: ${err.message}`);
+      return null;
     }
   }
 }

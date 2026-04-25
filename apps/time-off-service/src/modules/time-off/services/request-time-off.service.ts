@@ -81,7 +81,7 @@ export class RequestTimeOffService {
       const balance = await this.balanceRepo.getBalance(dto.employeeId, dto.locationId, queryRunner.manager);
       
       if (!balance) {
-        throw new Error('Balance not found for employee');
+        throw new Error('BALANCE_NOT_FOUND');
       }
 
       // Check balance

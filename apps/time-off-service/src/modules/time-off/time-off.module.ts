@@ -10,6 +10,7 @@ import { BalanceOrmEntity } from '../../infrastructure/database/entities/balance
 import { RequestOrmEntity } from '../../infrastructure/database/entities/request.orm-entity';
 import { HttpModule } from '@nestjs/axios';
 import { HcmHttpAdapter } from './adapters/hcm-http.adapter';
+import { StartupSyncService } from './services/startup-sync.service';
 import { BALANCE_REPOSITORY } from './repositories/balance.repository.interface';
 import { REQUEST_REPOSITORY } from './repositories/request.repository.interface';
 import { HCM_ADAPTER } from './adapters/hcm.adapter.interface';
@@ -24,6 +25,7 @@ import { HCM_ADAPTER } from './adapters/hcm.adapter.interface';
     RequestTimeOffService,
     BalanceSyncService,
     RetryRequestsService,
+  StartupSyncService,
     {
       provide: BALANCE_REPOSITORY,
       useClass: TypeOrmBalanceRepository,

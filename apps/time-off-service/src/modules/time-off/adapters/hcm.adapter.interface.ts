@@ -29,4 +29,12 @@ export interface HcmAdapter {
    * Resolves with 'approved' or 'rejected' on business responses.
    */
   submitTimeOffRequest(params: HcmTimeOffRequestParams): Promise<HcmTimeOffRequestResponse>;
+  /**
+   * Optional: fetch all balances from HCM as a batch. Return an array of { employeeId, locationId, balance }
+   */
+  fetchAllBalances?(): Promise<Array<{ employeeId: string; locationId: string; balance: number }>>;
+  /**
+   * Optional: fetch a single balance from HCM for an employee/location
+   */
+  fetchBalance?(employeeId: string, locationId: string): Promise<{ employeeId: string; locationId: string; balance: number } | null>;
 }

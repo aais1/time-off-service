@@ -1,7 +1,8 @@
 import { Injectable, Inject, Logger } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { BalanceRepository, BALANCE_REPOSITORY } from '../repositories/balance.repository.interface';
-import { RequestRepository, REQUEST_REPOSITORY } from '../repositories/request.repository.interface';
+import { BalanceOrmEntity } from '../../../infrastructure/database/entities/balance.orm-entity';
+import { BALANCE_REPOSITORY } from '../repositories/balance.repository.interface';
+import { REQUEST_REPOSITORY } from '../repositories/request.repository.interface';
 import { TimeOffBalance } from '../domain/entities/balance.entity';
 import { RequestStatus } from '../domain/entities/request.entity';
 
@@ -45,9 +46,16 @@ export class BalanceSyncService {
             new Date(),
             new Date()
           );
-          // Assuming our TypeOrm implementation handles updates on save if we don't pass an existing entity or we can manually save it.
-          // For now, we will assume we use the manager to save directly
-          await queryRunner.manager.save('time_off_balances', newBalance); 
+          // Persist via ORM entity inside the current transaction to ensure the row is created
+          const ormRepo = queryRunner.manager.getRepository(BalanceOrmEntity);
+          const ormEntity = new BalanceOrmEntity();
+          ormEntity.employeeId = newBalance.employeeId;
+          ormEntity.locationId = newBalance.locationId;
+          ormEntity.amount = newBalance.amount;
+          ormEntity.version = 1;
+          ormEntity.lastSyncedAt = newBalance.lastSyncedAt;
+          // updatedAt is handled by the UpdateDateColumn on save
+          await ormRepo.save(ormEntity);
         }
 
         // 2. Perform Reconciliation for each synced balance

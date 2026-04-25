@@ -1,0 +1,51 @@
+# Node
+node_modules/
+
+# Build output
+dist/
+**/dist/
+
+# TypeScript
+*.tsbuildinfo
+
+# Coverage
+coverage/
+**/coverage/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+logs/
+*.log
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.vscode/
+.idea/
+
+# Database files (SQLite)
+*.db
+*.sqlite
+*.sqlite3
+
+# Nested node_modules
+**/node_modules/
+
+# Misc
+.nyc_output/
+.cache/
+.sass-cache/
+
+# HCM express server runtime files
+apps/hcm-express/node_modules/
+apps/hcm-express/*.log
